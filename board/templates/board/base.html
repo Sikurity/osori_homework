@@ -41,15 +41,31 @@
     </div>
 </div>
 <div id="all_body" style="width: 100%;">
-    <header id="topnav" class="ui large secondary pointing menu" style="margin-bottom: 0px">
+    <div id="topnav" class="ui menu" style="margin-bottom: 0px">
         <a class="item">
             <i class="sidebar icon"></i>
         </a>
         <a class="item">동아리 소개</a>
-        <a class="item">프로젝트 팀 내역</a>
-        <a class="item" href="{% url 'article_table' %}">게시판</a>
+        <div class="ui pointing dropdown link item">
+            <span class="text">팀 프로젝트</span>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+                <div class="item">진행중 프로젝트</div>
+                <div class="item">완료된 프로젝트</div>
+            </div>
+        </div>
+        <div class="ui pointing dropdown link item">
+            <span class="text">게시판</span>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+                <a class="item" href="{% url 'article_table' %}">공지게시판</a>
+                <div class="item">자유게시판</div>
+                <div class="item">정보게시판</div>
+            </div>
+        </div>
         <a class="item">사진첩</a>
-    </header>
+        <a class="item">Contact</a>
+    </div>
 
     {% block content %}
     {% endblock content %}
@@ -75,6 +91,8 @@
 
         document.getElementById('dpTime').innerText = hours + ":" + minutes + ":" + seconds
     }, 0)
+
+    $('.ui.dropdown').dropdown();
 </script>
 </body>
 </html>
