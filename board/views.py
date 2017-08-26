@@ -11,7 +11,11 @@ def article_table(request):
 
 def article_detail(request, pk):
     article = get_object_or_404(Article, pk=pk)
+    article.article_viewed()
     return render(request, 'board/article_detail.html', {'article' : article})
+
+def index(request):
+    return render(request, 'board/index.html')
 
 @login_required
 def article_new(request):

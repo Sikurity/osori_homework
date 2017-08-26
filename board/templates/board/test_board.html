@@ -1,17 +1,34 @@
 {% extends 'board/base_table.html' %}
 {% block articled %}
 <div>
-    <h1><a href="">TEST BOARD</a></h1>
-{% if user.is_authenticated %}
+    <h1>
+        <a href="">
+            {{ user.username }}'s TEST BOARD
+        </a>
+    </h1>
+    {% if user.is_authenticated %}
     <a href="{% url 'article_new' %}" class="top-menu">new post</a>
-{% endif %}
+    {% endif %}
 </div>
 
 {% for article in articles %}
-    <div>
+<div>
+    <form>
+        <h2>{{ article.author }} - {{ article.title }} - {{ article.view_count }}</h2>
         <h2><a href="{% url 'article_detail' pk=article.pk %}">{{ article.title }}</a></h2>
-        
+
+        {% if user.username == article.author.username %}
+        <button class="ui button" formaction="{% url 'article_edit' pk=article.pk %}">
+            수정
+        </button>
+        <button class="ui button" formaction="{% url 'article_remove' pk=article.pk %}">
+            삭제
+        </button>
+        {% else %}
+        {{ user.username }} {{ article.author.username }}
+        {% endif %}
         <p>생성일자: {{ article.created_date }} Comments: {{ article.comments.count }}</p>
-    </div>
+    </form>
+</div>
 {% endfor %}
 {% endblock articled %}

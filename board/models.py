@@ -14,6 +14,10 @@ class Article(models.Model):
     def __str__(self):
         return self.title
 
+    def article_viewed(self):
+        self.view_count += 1
+        self.save()
+
 class Comment(models.Model):
     article = models.ForeignKey('board.Article', related_name='comments')
     author = models.CharField(max_length=200)
