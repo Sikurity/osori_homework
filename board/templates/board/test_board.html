@@ -1,34 +1,56 @@
 {% extends 'board/base_table.html' %}
 {% block articled %}
-<div>
-    <h1>
-        <a href="">
-            {{ user.username }}'s TEST BOARD
-        </a>
-    </h1>
-    {% if user.is_authenticated %}
-    <a href="{% url 'article_new' %}" class="top-menu">new post</a>
-    {% endif %}
-</div>
-
-{% for article in articles %}
-<div>
-    <form>
-        <h2>{{ article.author }} - {{ article.title }} - {{ article.view_count }}</h2>
-        <h2><a href="{% url 'article_detail' pk=article.pk %}">{{ article.title }}</a></h2>
-
-        {% if user.username == article.author.username %}
-        <button class="ui button" formaction="{% url 'article_edit' pk=article.pk %}">
-            수정
-        </button>
-        <button class="ui button" formaction="{% url 'article_remove' pk=article.pk %}">
-            삭제
-        </button>
-        {% else %}
-        {{ user.username }} {{ article.author.username }}
+<div class="ui center aligned container" style="width: 50%;">
+    <div class="ui grid">
+        <div class="three wide column"></div>
+        <div class="ten wide column">
+            <h1>
+                <a href="">
+                    공지 게시판
+                </a>
+            </h1>
+        </div>
+        {% if user.is_authenticated %}
+        <div class="three wide column right aligned">
+            <br>
+            <a style="" href="{% url 'article_new' %}">new post</a>
+        </div>
         {% endif %}
-        <p>생성일자: {{ article.created_date }} Comments: {{ article.comments.count }}</p>
-    </form>
+    </div>
+    <table class="ui celled table">
+        <thead>
+            <th>번호</th>
+            <th>제목</th>
+            <th>글쓴이</th>
+            <th>작성일</th>
+            <th>댓글수</th>
+            <th>조회수</th>
+        </thead>
+        <tbody>
+    {% for article in articles %}
+        <tr>
+            <td>{{ article.pk }}</td>
+            <td><a href="{% url 'article_detail' pk=article.pk %}">{{ article.title }}</a></td>
+            <td>{{ article.author }}</td>
+            <td>{{ article.created_date }}</td>
+            <td>{{ article.comments.count }}</td>
+            <td>{{ article.view_count }}</td>
+        </tr>
+    {% endfor %}
+        </tbody>
+    </table>
+    <div>
+        {% if pagination.has_previous %}
+            <a href="?page={{ pagination.previous_page_number }}">&nbsp;&lt;&nbsp;</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ pagination.number }} of {{ pagination.paginator.num_pages }}.
+        </span>
+
+        {% if pagination.has_next %}
+            <a href="?page={{ pagination.next_page_number }}">&nbsp;&gt;&nbsp;</a>
+        {% endif %}
+    </div>
 </div>
-{% endfor %}
 {% endblock articled %}

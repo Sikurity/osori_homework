@@ -1,14 +1,14 @@
 {% extends 'board/base.html' %}
 {% block content %}
 
-<nav class = "left_nav">
-	<ul>
-		<li><a href="">공지 게시판</a></li>
-		<li>자유 게시판</li>
-		<li>정보 게시판</li>
-		<li>Q&amp;A 게시판</li>
-	</ul>
+<nav class="ui vertical menu" style="float: left;" id="left_nav">
+	<a class="active item">공지 게시판</a>
+	<a class="item">>자유 게시판</a>
+	<a class="item">>정보 게시판</a>
+	<a class="item">>Q&amp;A 게시판</a>
 </nav>
-{% block articled %}
-{% endblock articled %}
+
+	{% block articled %}
+	{% endblock articled %}
+
 {% endblock content %}

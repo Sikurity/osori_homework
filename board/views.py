@@ -3,16 +3,30 @@ from django.utils import timezone
 from .models import Article, Comment
 from .forms import ArticleForm, CommentForm
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
 def article_table(request):
-	articles = Article.objects.filter(created_date__lte=timezone.now()).order_by('-created_date')
-	return render(request, 'board/test_board.html',{'articles' : articles})
+    articles = Article.objects.filter(created_date__lte=timezone.now()).order_by('-created_date')
+
+    paginator = Paginator(articles, 10)  # Show 10 contacts per page
+    page = request.GET.get('page')
+    try:
+        pagination = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        pagination = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        pagination = paginator.page(paginator.num_pages)
+
+    return render(request, 'board/test_board.html',{'articles': articles, 'pagination': pagination})
 
 def article_detail(request, pk):
     article = get_object_or_404(Article, pk=pk)
     article.article_viewed()
-    return render(request, 'board/article_detail.html', {'article' : article})
+    form = CommentForm()
+    return render(request, 'board/article_detail.html', {'article': article, 'form': form})
 
 def index(request):
     return render(request, 'board/index.html')
@@ -41,8 +55,7 @@ def article_edit(request, pk):
             article.save()
             return redirect('article_detail', pk=article.pk)
     else:
-        form = ArticleForm(instance=article)
-    return render(request, 'board/article_edit.html', {'form': form})
+        return render(request, 'board/article_edit.html', {'article': article})
 
 @login_required
 def article_remove(request, pk):

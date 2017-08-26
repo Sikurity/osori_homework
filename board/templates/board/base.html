@@ -17,44 +17,64 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.js"></script>
     -->
 </head>
-<body>
-<div id = "all_body">
-    <header>
-        <div class = "dongmoon">
-            현재시간
-            <span id="dpTime">오전 00:00:00</span>
-            동방 문은
-            <span class="check">열림</span>
+<div class="ui inverted vertical masthead right aligned segment">
+    <div class="ui center aligned header">
+        <div class="ui large secondary inverted right aligned pointing menu">
+            <div class="ui inverted center aligned item">
+                <a href="/">OSORI</a>
+            </div>
+            <div class="right item">
+                현재시간&nbsp;
+                <span id="dpTime">오전 00:00:00</span>&nbsp;
+                동방 문은&nbsp;
+                <span class="check">열림</span>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}" class="ui inverted button">logout</a>
+                {% else %}
+                <a href="{% url 'login' %}" class="ui inverted button">Log in</a>
+                &nbsp;&nbsp;
+                <a class="ui inverted button">Sign Up</a>
+                {% endif %}
+            </div>
         </div>
-        <h1>오소리</h1>
-        <div class = "topmenu">
-
-            {% if user.is_authenticated %}
-            <a href="{% url 'logout' %}" class="top-menu">logout</a>
-            {% else %}
-            <a href="{% url 'login' %}" class="top-menu">login</a>
-            {% endif %}
-
-        </div>
+    </div>
+</div>
+<div id="all_body" style="width: 100%;">
+    <header id="topnav" class="ui large secondary pointing menu" style="margin-bottom: 0px">
+        <a class="item">
+            <i class="sidebar icon"></i>
+        </a>
+        <a class="item">동아리 소개</a>
+        <a class="item">프로젝트 팀 내역</a>
+        <a class="item" href="{% url 'article_table' %}">게시판</a>
+        <a class="item">사진첩</a>
     </header>
-    <nav class = "topnav">
-        <ul>
-            <li>동아리 소개</li>
-            <li>프로젝트 팀 내역</li>
-            <li><a href="{% url 'article_table' %}">게시판</a></li>
-            <li>사진첩</li>
-        </ul>
-    </nav>
-    <br>
 
     {% block content %}
     {% endblock content %}
 
-    <footer>
-        <div class = "copyright">
+    <br>
+    <footer style="clear: both;">
+        <div class="ui center aligned container" id="copyright">
             COPYRIGHT(C) 2017. All rights reserved by OSORI
         </div>
     </footer>
 </div>
+<script>
+    function format02d(num) {
+
+	    return num < 10 ? "0" + num : num;
+    }
+
+    setInterval(function(){
+        var today   = new Date();
+        var hours   = format02d(today.getHours());
+        var minutes = format02d(today.getMinutes());
+        var seconds = format02d(today.getSeconds());
+
+        document.getElementById('dpTime').innerText = hours + ":" + minutes + ":" + seconds
+    }, 0)
+</script>
 </body>
 </html>
